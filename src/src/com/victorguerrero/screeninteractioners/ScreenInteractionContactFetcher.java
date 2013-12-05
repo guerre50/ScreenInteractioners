@@ -20,7 +20,6 @@ public class ScreenInteractionContactFetcher extends URLFetcher<ArrayList<Contac
 			JSONArray arr = new JSONArray(jsonResponse);
 			
 			for (int i = 0; i < arr.length(); ++i) {
-				Log.d("Fetcher", arr.getJSONObject(i).toString());
 				contacts.add(new Contact(arr.getJSONObject(i)));
 			}
 		} catch (JSONException e) {

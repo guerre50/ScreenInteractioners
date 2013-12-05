@@ -16,6 +16,7 @@ public class Contact {
 	private Bitmap thumbnail;
 	private Bitmap picture;
 	private JSONObject json;
+	private boolean favorited;
 	
 	public Contact() {
 		name = "UNDEFINED";

@@ -15,9 +15,6 @@ public class ImageFetcher extends URLFetcher<Bitmap> {
 	@Override
 	protected void onPostExecute(byte[] response) {
 		if (this.listener != null) {
-			if (bitmap == null) {
-				Log.d("FASDFAs", "DFAS");
-			}
 			listener.onFetched(bitmap);
 		}
 	}
@@ -34,7 +31,8 @@ public class ImageFetcher extends URLFetcher<Bitmap> {
 			connection.connect();
 			
 			InputStream is = connection.getInputStream();
-			
+			// TO-DO fix URLFetcher, it fails to get properly images 
+			// probably due to the buffer size
 			bitmap = BitmapFactory.decodeStream(is);
 		} catch(Exception ex) {
 			Log.d("FetcherError", ex.toString());

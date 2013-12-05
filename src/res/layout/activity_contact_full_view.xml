@@ -36,6 +36,7 @@
 	    	    android:layout_height="match_parent">
 
 	    		<ImageView
+	    		    android:id="@+id/full_view_favorite_contact"
 	    		    android:layout_width="30dp"
 	    		    android:layout_height="wrap_content"
 	    		    android:layout_centerInParent="true"
@@ -55,6 +56,7 @@
 	    	    android:layout_height="match_parent">
 
 	    		<ImageView
+	    		    android:id="@+id/full_view_add_contact"
 	    		    android:layout_width="30dp"
 	    		    android:layout_height="wrap_content"
 	    		    android:layout_centerInParent="true"
