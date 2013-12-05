@@ -1,0 +1,170 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ContactFullViewActivity" >
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="54dp"
+	    android:orientation="horizontal"
+	    android:background="@drawable/action_bar_background">
+
+	    <TextView
+	        android:id="@+id/full_view_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:text="dfasdfa"
+	    	android:layout_marginLeft="10dp"
+	        android:gravity="center"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="#FFFFFF" >
+	    </TextView>
+	    <LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="horizontal"
+	    android:gravity="right">
+	    	<View
+			    android:layout_width="1dp"
+			    android:layout_height="match_parent"
+			    android:background="@drawable/action_bar_divider" >
+			</View>
+			<RelativeLayout 
+			    android:layout_width="60dp"
+	    	    android:layout_height="match_parent">
+
+	    		<ImageView
+	    		    android:layout_width="30dp"
+	    		    android:layout_height="wrap_content"
+	    		    android:layout_centerInParent="true"
+	    		    android:background="#00000000"
+	    		    android:src="@drawable/contact_favorite_button" >
+
+	            </ImageView>
+            </RelativeLayout>
+            
+			<View
+			    android:layout_width="1dp"
+			    android:layout_height="match_parent"
+			    android:background="@drawable/action_bar_divider" >
+			</View>
+			<RelativeLayout 
+			    android:layout_width="60dp"
+	    	    android:layout_height="match_parent">
+
+	    		<ImageView
+	    		    android:layout_width="30dp"
+	    		    android:layout_height="wrap_content"
+	    		    android:layout_centerInParent="true"
+	    		    android:background="#00000000"
+	    		    android:src="@drawable/contact_add_button" >
+
+	            </ImageView>
+            </RelativeLayout>
+	    </LinearLayout>
+	</LinearLayout>
+	<RelativeLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="178dp"
+	    android:layout_gravity="top"
+	    android:layout_margin="0dp"
+	    android:gravity="top" >
+
+    <ImageView
+        android:id="@+id/full_view_picture"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/no_picture" />
+    <TextView
+        android:id="@+id/full_view_job_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:shadowColor="#000000"
+        android:shadowRadius="2"
+        android:shadowDy="1"
+        android:textColor="#FFFFFF"
+        android:padding="10dp"
+        android:text=""
+        android:background="@drawable/rounded_rectangle"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical"
+	    android:layout_margin="10dp"
+	    >
+	    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/telephone_label"
+        android:textColor="#FFFFFF"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/full_view_telephone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#54b4e6"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="10dp"
+        android:background="@drawable/contact_attribute_button" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/email_label"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/full_view_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#54b4e6"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="10dp"
+        android:background="@drawable/contact_attribute_button" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/website_label"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/full_view_website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#54b4e6"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="10dp"
+        android:background="@drawable/contact_attribute_button" />
+	</LinearLayout>
+    
+</LinearLayout>
