@@ -1,4 +1,4 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.graphics.Bitmap;
 
 public class Contact {
+	private int id;
 	private String name;
 	private String jobTitle;
 	private String thumbnailURL;
@@ -28,7 +29,7 @@ public class Contact {
 		try {
 			this.json = json;
 			
-			cleanName();
+			removeExtraSurnames();
 			
 			name = json.getString("name");
 			jobTitle = json.getString("job_title");
@@ -37,13 +38,12 @@ public class Contact {
 			email = json.getString("email");
 			webpage = json.getString("webpage");
 			phone = json.getString("phone");
-			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void cleanName() {
+	public void removeExtraSurnames() {
 		try {
 			String name = this.json.getString("name");
 			String[] names = name.split(" ");
@@ -102,6 +102,10 @@ public class Contact {
 	
 	public String getEmail() {
 		return email;
+	}
+	
+	public int getID() {
+		return id;
 	}
 	
 	public Boolean getFavorited() {

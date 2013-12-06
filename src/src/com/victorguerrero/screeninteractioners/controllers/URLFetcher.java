@@ -1,10 +1,9 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.controllers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -31,7 +30,13 @@ public abstract class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
 	
 	protected void retry() {
 		retries += 1;
-		this.execute(this.param);
+		if (onRetry()) {
+			//this.execute(this.param);
+		}
+	}
+	
+	protected boolean onRetry() {
+		return true;
 	}
 	
 	protected abstract T postProcess(byte[] response);
@@ -57,8 +62,7 @@ public abstract class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
 			
 			InputStream is = connection.getInputStream();
 			
-			
-			byte[] b = new byte[1024];
+			byte[] b = new byte[256];
 			ByteArrayOutputStream response = new ByteArrayOutputStream();
 			
 			while(is.read(b) != -1) {
@@ -71,7 +75,7 @@ public abstract class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
 		}
 		
 		// We do the post processing of the response in an asyncrhonous way
-		// to avoid hiccups in main thread
+		// to avoid hicups in the main thread
 		this.result = postProcess(result);
 		
 		return result;

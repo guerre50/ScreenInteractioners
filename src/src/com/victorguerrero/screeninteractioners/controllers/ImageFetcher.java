@@ -1,6 +1,5 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.controllers;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;

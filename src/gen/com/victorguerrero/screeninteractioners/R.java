@@ -72,42 +72,40 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int splash_screen_logo=0x7f02001f;
     }
     public static final class id {
-        public static final int TextView01=0x7f0a0007;
-        public static final int TextView02=0x7f0a0009;
-        public static final int action_ordering=0x7f0a0015;
-        public static final int contact_job_position=0x7f0a0010;
-        public static final int contact_name=0x7f0a000f;
-        public static final int contact_ordering=0x7f0a000c;
-        public static final int contact_starred=0x7f0a0011;
-        public static final int contact_thumbnail=0x7f0a000e;
-        public static final int contacts_loading_view=0x7f0a0013;
-        public static final int full_view_add_contact=0x7f0a0002;
-        public static final int full_view_email=0x7f0a0008;
-        public static final int full_view_favorite_contact=0x7f0a0001;
-        public static final int full_view_job_title=0x7f0a0004;
-        public static final int full_view_name=0x7f0a0000;
-        public static final int full_view_picture=0x7f0a0003;
-        public static final int full_view_telephone=0x7f0a0006;
-        public static final int full_view_website=0x7f0a000a;
-        public static final int imageView1=0x7f0a000d;
-        public static final int linearLayout1=0x7f0a000b;
-        public static final int list=0x7f0a0012;
-        public static final int progressBar1=0x7f0a0014;
-        public static final int textView1=0x7f0a0005;
+        public static final int TextView01=0x7f090007;
+        public static final int TextView02=0x7f090009;
+        public static final int action_bar=0x7f090002;
+        public static final int contact_job_position=0x7f090011;
+        public static final int contact_name=0x7f090010;
+        public static final int contact_ordering=0x7f09000d;
+        public static final int contact_starred=0x7f090012;
+        public static final int contact_thumbnail=0x7f09000f;
+        public static final int contacts_loading_view=0x7f090014;
+        public static final int full_view_add_contact=0x7f09000b;
+        public static final int full_view_email=0x7f090008;
+        public static final int full_view_favorite_contact=0x7f090001;
+        public static final int full_view_job_title=0x7f090004;
+        public static final int full_view_name=0x7f090000;
+        public static final int full_view_picture=0x7f090003;
+        public static final int full_view_telephone=0x7f090006;
+        public static final int full_view_website=0x7f09000a;
+        public static final int imageView1=0x7f09000e;
+        public static final int linearLayout1=0x7f09000c;
+        public static final int list=0x7f090013;
+        public static final int progressBar1=0x7f090015;
+        public static final int textView1=0x7f090005;
     }
     public static final class layout {
         public static final int action_bar_complete=0x7f030000;
         public static final int action_bar_item=0x7f030001;
         public static final int action_ordering=0x7f030002;
         public static final int activity_contact_full_view=0x7f030003;
-        public static final int activity_main=0x7f030004;
-        public static final int activity_splash_screen=0x7f030005;
-        public static final int contact_row_view=0x7f030006;
-        public static final int contacts_list_view=0x7f030007;
-    }
-    public static final class menu {
-        public static final int contact_full_view=0x7f090000;
-        public static final int main=0x7f090001;
+        public static final int activity_contact_full_view_action_bar=0x7f030004;
+        public static final int activity_main=0x7f030005;
+        public static final int activity_main_action_bar=0x7f030006;
+        public static final int activity_splash_screen=0x7f030007;
+        public static final int contact_row_view=0x7f030008;
+        public static final int contacts_list_view=0x7f030009;
     }
     public static final class string {
         public static final int action_ordering=0x7f070011;

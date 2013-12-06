@@ -1,28 +1,38 @@
 package com.victorguerrero.screeninteractioners;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.victorguerrero.screeninteractioners.URLFetcher.OnFetched;
+import com.victorguerrero.screeninteractioners.controllers.AccelerometerManager;
+import com.victorguerrero.screeninteractioners.controllers.AccelerometerManager.AccelerometerListener;
+import com.victorguerrero.screeninteractioners.controllers.ContactAndroidIntents;
+import com.victorguerrero.screeninteractioners.controllers.ImageFetcher;
+import com.victorguerrero.screeninteractioners.controllers.JSONFetcher;
+import com.victorguerrero.screeninteractioners.controllers.URLFetcher;
+import com.victorguerrero.screeninteractioners.controllers.URLFetcher.OnFetched;
+import com.victorguerrero.screeninteractioners.models.Contact;
 
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-public class ContactFullViewActivity extends Activity implements OnTouchListener {
+public class ContactFullViewActivity extends Activity implements OnTouchListener, AccelerometerListener {
 	private Contact contact;
+	private String GOOGLE_SEARCH_API = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=";
+	float FORCE_THRESHOLD = 10;
+	private ImageView pictureView;
+	private URLFetcher<JSONObject> jsonFetcher;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +48,8 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.contact_full_view, menu);
-		return true;
+		
+		pictureView = (ImageView)findViewById(R.id.full_view_picture);
 	}
 	
 	public void LoadContactData(final Contact contact) {
@@ -67,7 +73,11 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 		telephone.setText(contact.getPhone());
 		website.setText(contact.getWebpage());
 		
-		
+		loadPicture();
+	}
+	
+	// TO-DO do a view for lazy loading of images
+	private void loadPicture() {
 		String pictureURL = contact.getPictureURL();
 		if (!pictureURL.equals("")) {
 			final ImageView pictureView = (ImageView)findViewById(R.id.full_view_picture);
@@ -92,10 +102,7 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 						}
 					})
 		        	.execute(pictureURL);
-			} else {
-				
 			}
-			
 		}
 	}
 
@@ -125,7 +132,7 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
             		return true;
 				case R.id.full_view_favorite_contact:
 	        		favoriteContact();
-	        		return true;
+	        		return false;
 				case R.id.full_view_add_contact:
 		    		addContact();
 		    		return true;
@@ -136,49 +143,115 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 	}
 	
 	public void openWebpage() {
-		Intent i = new Intent(Intent.ACTION_VIEW);
-		i.setData(Uri.parse(contact.getWebpage()));
+		Intent i = ContactAndroidIntents.openWebsite(contact);
+		
 		startActivity(i);
 	}
 	
 	public void call() {
-		String uri = "tel:" + contact.getPhone();
-		Intent i = new Intent(Intent.ACTION_CALL);
-		i.setData(Uri.parse(uri));
+		Intent i = ContactAndroidIntents.callPhone(contact);
 		
 		startActivity(i);
 	}
 	
 	public void sendEmail() {
-		String email = contact.getEmail();
-        String subject = "";
-        String message = "";
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
-        i.putExtra(Intent.EXTRA_SUBJECT, subject);
-        i.putExtra(Intent.EXTRA_TEXT, message);
-        i.setType("message/rfc822");
+		Intent i = ContactAndroidIntents.sendEmail(contact);
 
         startActivity(Intent.createChooser(i, getText(R.string.choose_email_client)));
 	}
 	
 	public void addContact() {
-		Intent i = new Intent(Intent.ACTION_INSERT,
-							ContactsContract.Contacts.CONTENT_URI);
-		i.setType(ContactsContract.Contacts.CONTENT_TYPE);
-		i.putExtra(ContactsContract.Intents.EXTRA_FORCE_CREATE, true);
-		i.putExtra(ContactsContract.Intents.Insert.EMAIL, contact.getEmail());
-	    i.putExtra(ContactsContract.Intents.Insert.NAME, contact.getName());
-	    i.putExtra(ContactsContract.Intents.Insert.PHONE, contact.getPhone());
-	    i.putExtra(ContactsContract.Intents.Insert.COMPANY, getText(R.string.company));
-	    i.putExtra(ContactsContract.Intents.Insert.JOB_TITLE, contact.getJobTitle());
-	    
+		Intent i = ContactAndroidIntents.addToContacts(contact);
+		
 		startActivity(i);
+		
 	}
 	
 	public void favoriteContact() {
 		
 	}
+
+	@Override
+	public void onAccelerationChanged(float x, float y, float z) {
+		
+		
+	}
+
+	@Override
+	public void onShake(float force) {
+		if (force > FORCE_THRESHOLD && jsonFetcher == null) {
+			searchGoogleImages();
+		}
+	}
+	
+	private void searchGoogleImages() {
+		try {
+			String query = URLEncoder.encode(contact.getName(), "utf-8");
+		
+			jsonFetcher = new JSONFetcher()
+				.setOnFetched(new OnFetched() {
+					@Override
+					public <T> void onFetched(T googlSearch) {
+						JSONObject response = (JSONObject)googlSearch;
+						try {
+							JSONObject responseData = response.getJSONObject("responseData");
+							JSONArray results = responseData.getJSONArray("results");
+							
+							JSONObject imageResult = (JSONObject)results.get((int)(Math.random()*results.length()));
+							
+							String url = imageResult.getString("tbUrl");
+							loadImage(url);
+						} catch (JSONException e) {
+							jsonFetcher = null;
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+				});
+			jsonFetcher.execute(GOOGLE_SEARCH_API + query);
+		} catch (UnsupportedEncodingException e) {
+			jsonFetcher = null;
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadImage(String url) {
+		new ImageFetcher().setOnFetched(new OnFetched() {
+			@Override
+			public <T> void onFetched(T response) {
+				final Bitmap image = (Bitmap)response;
+				jsonFetcher = null;
+				pictureView.setImageBitmap(image);
+			}
+		}).execute(url);
+	}
+	
+	@Override
+    public void onResume() {
+        super.onResume();
+         
+        if (AccelerometerManager.isSupported(this)) {
+            AccelerometerManager.startListening(this);
+        }
+    }
+     
+    @Override
+    public void onStop() {
+		super.onStop();
+		 
+		if (AccelerometerManager.isListening()) {
+		    AccelerometerManager.stopListening();
+		}  
+    }
+     
+    @Override
+    public void onDestroy() {
+		super.onDestroy();
+		
+		if (AccelerometerManager.isListening()) {
+		    AccelerometerManager.stopListening();
+		}      
+    }
 
 }

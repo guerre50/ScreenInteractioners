@@ -1,4 +1,7 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.views;
+
+import com.victorguerrero.screeninteractioners.R;
+import com.victorguerrero.screeninteractioners.R.styleable;
 
 import android.widget.TextView;
 import android.util.AttributeSet;
@@ -7,10 +10,10 @@ import android.content.res.TypedArray;
 import android.content.Context;
 
 
-
+// OBS: class added to obtain color selector in TextView
+// for selection of rows in contact list
 public class CustomTextView extends TextView
 {
-
     private static String TAG = "CustomTextView";
 
     private ColorStateList mShadowColors;
@@ -24,13 +27,11 @@ public class CustomTextView extends TextView
         super(context);
     }
 
-
     public CustomTextView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
         init(context, attrs, 0);
     }
-
 
     public CustomTextView(Context context, AttributeSet attrs, int defStyle)
     {
@@ -38,14 +39,6 @@ public class CustomTextView extends TextView
         init(context, attrs, 0);
     }
 
-
-    /**
-     * Initialization process
-     * 
-     * @param context
-     * @param attrs
-     * @param defStyle
-     */
     private void init(Context context, AttributeSet attrs, int defStyle)
     {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTextView, defStyle, 0);

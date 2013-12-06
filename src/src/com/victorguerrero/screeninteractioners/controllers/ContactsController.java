@@ -1,26 +1,31 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.controllers;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import com.victorguerrero.screeninteractioners.models.Contact;
 
 public class ContactsController implements ScreenInteractionContactFetcher.OnFetched {
 	private ArrayList<Contact> contacts;
 	private static ContactsController instance = null;
 	private static final String SCREEN_INTERACTION_CONTACTS_URL = "http://www.screeninteraction.com/~simonedstrom/worksample-android/contacts.json";
 	
-	public enum Ordering { NAME_INCREASING, NAME_DECREASING, SURNAME_INCREASING, SURNAME_DECREASING};
+	public enum Ordering { 
+		NAME_INCREASING, 
+		NAME_DECREASING, 
+		SURNAME_INCREASING, 
+		SURNAME_DECREASING
+	};
 	private Ordering ordering;
-	
-	public interface OnContactsChangeListener {
-		public void onContactsChange();
-	}
-	
 	private OnContactsChangeListener contactsChangeListener;
 	
 	private ContactsController() {
 		contacts = new ArrayList<Contact>();
 	    refresh();
+	}
+	
+	public interface OnContactsChangeListener {
+		public void onContactsChange();
 	}
 	
 	public static ContactsController getInstance() {
@@ -44,6 +49,7 @@ public class ContactsController implements ScreenInteractionContactFetcher.OnFet
 	public void update(ArrayList<Contact> contacts) {
 		updateContacts(contacts);
 		orderContacts();
+		
 		if (contactsChangeListener != null) {
 			contactsChangeListener.onContactsChange();
 		}
@@ -66,13 +72,15 @@ public class ContactsController implements ScreenInteractionContactFetcher.OnFet
 		final int isSurname;
 		final int decreasing;
 		
-		if (ordering == Ordering.NAME_DECREASING || ordering == Ordering.NAME_INCREASING) {
+		if (ordering == Ordering.NAME_DECREASING 
+				|| ordering == Ordering.NAME_INCREASING) {
 			isSurname = 0;
 		} else {
 			isSurname = 1;
 		}
 		
-		if (ordering == Ordering.NAME_DECREASING || ordering == Ordering.SURNAME_DECREASING) {
+		if (ordering == Ordering.NAME_DECREASING 
+				|| ordering == Ordering.SURNAME_DECREASING) {
 			decreasing = -1;
 		} else {
 			decreasing = 1;
@@ -103,6 +111,10 @@ public class ContactsController implements ScreenInteractionContactFetcher.OnFet
 	
 	public Contact getContact(int order) {
 		return contacts.get(order);
+	}
+	
+	public void loadContacts() {
+		
 	}
 	
 	public void setOrdering(int ordering) {

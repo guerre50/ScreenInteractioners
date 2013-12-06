@@ -1,15 +1,10 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.controllers;
 
 import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import android.os.Debug;
-import android.util.Log;
-import android.widget.Toast;
-
-
+import com.victorguerrero.screeninteractioners.models.Contact;
 
 public class ScreenInteractionContactFetcher extends URLFetcher<ArrayList<Contact>> {
 	@Override

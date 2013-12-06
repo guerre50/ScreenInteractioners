@@ -1,4 +1,6 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.views;
+
+import com.victorguerrero.screeninteractioners.R;
 
 import android.content.Context;
 import android.widget.ImageView;

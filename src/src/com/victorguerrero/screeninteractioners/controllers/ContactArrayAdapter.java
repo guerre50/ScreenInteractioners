@@ -1,26 +1,21 @@
-package com.victorguerrero.screeninteractioners;
+package com.victorguerrero.screeninteractioners.controllers;
 
 import java.util.ArrayList;
 
-import com.victorguerrero.screeninteractioners.URLFetcher.OnFetched;
+import com.victorguerrero.screeninteractioners.R;
+import com.victorguerrero.screeninteractioners.controllers.URLFetcher.OnFetched;
+import com.victorguerrero.screeninteractioners.models.Contact;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.text.method.Touch;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class ContactArrayAdapter extends ArrayAdapter<Contact> implements ContactsController.OnContactsChangeListener
@@ -35,11 +30,12 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> implements Contac
     {
         super(activity, contactViewResourceId, contactsController.get());
         contactsController.setOnContactsChangeListener(this);
+        
         this.list = contactsController.get();
         this.contactsController = contactsController;
         this.contactViewId = contactViewResourceId;
         this.activity = activity;
-        noAvatar = activity.getResources().getDrawable( R.drawable.no_thumbnail);
+        this.noAvatar = activity.getResources().getDrawable(R.drawable.no_thumbnail);
     }
          
     @Override
@@ -52,17 +48,26 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> implements Contac
         
         TextView nameView = (TextView) convertView.findViewById(R.id.contact_name);
         TextView jobView = (TextView) convertView.findViewById(R.id.contact_job_position);
-        final ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.contact_thumbnail);
         ImageView starredView = (ImageView) convertView.findViewById(R.id.contact_starred);
         
-        final Contact contact = contactsController.getContact(position);
+        Contact contact = contactsController.getContact(position);
         
         convertView.setTag(contact.getName());
         
         nameView.setText(contact.getName());
         jobView.setText(contact.getJobTitle());
         
-        Bitmap thumbnail = contact.getThumbnail();
+        final ImageView thumbnailView = (ImageView)convertView.findViewById(R.id.contact_thumbnail);
+        
+        
+        loadThumbnail(contact, thumbnailView);
+ 
+        return convertView;
+    }
+    
+    // TO-DO move thumbnail loading to Contact
+    private void loadThumbnail(final Contact contact, final ImageView thumbnailView) {
+    	Bitmap thumbnail = contact.getThumbnail();
         final String thumbnailURL = contact.getThumbnailURL();
 		thumbnailView.setTag(thumbnailURL);
 		
@@ -75,6 +80,7 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> implements Contac
 						public <T> void onFetched(T response) {
 							final Bitmap image = (Bitmap)response;
 							contact.setThumbnail(image);
+							
 							if (((String)thumbnailView.getTag()).equals(thumbnailURL)) {
 								thumbnailView.setImageBitmap(image);
 								thumbnailView.invalidate();
@@ -86,8 +92,6 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> implements Contac
         } else {
         	thumbnailView.setImageBitmap(thumbnail);
         }
- 
-        return convertView;
     }
 
 	@Override
