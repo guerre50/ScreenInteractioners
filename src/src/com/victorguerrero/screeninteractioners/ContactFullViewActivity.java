@@ -11,6 +11,7 @@ import android.provider.ContactsContract;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +29,6 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contact_full_view);
 		
-		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			try {
@@ -38,7 +38,6 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
 	@Override
@@ -100,47 +99,40 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 		}
 	}
 
+	public void setFavoritedImage(ImageView favoritedView) {
+		int favoriteImageId;
+		if (contact.getFavorited()) {
+			favoriteImageId = R.drawable.favorite_contact;
+		} else {
+			favoriteImageId = R.drawable.favorite_contact_active;
+		}
+		Drawable favoriteImage = getResources().getDrawable(favoriteImageId);
+		favoritedView.setImageDrawable(favoriteImage);
+	}
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		switch (v.getId()) {
-    	case R.id.full_view_telephone:
-	    		switch (event.getAction()) {
-	            	case MotionEvent.ACTION_UP:
-	            		call();
-	            		return true;
-	    		}
-	    		break;
-    	case R.id.full_view_email:
-    		switch (event.getAction()) {
-            	case MotionEvent.ACTION_UP:
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			switch (v.getId()) {
+		    	case R.id.full_view_telephone:
+            		call();
+            		return true;
+		    	case R.id.full_view_email:
             		sendEmail();
             		return true;
-    		}
-    		break;
-    	case R.id.full_view_website:
-    		switch (event.getAction()) {
-            	case MotionEvent.ACTION_UP:
+		    	case R.id.full_view_website:
             		openWebpage();
             		return true;
-    		}
-    		break;
-		case R.id.full_view_favorite_contact:
-			switch (event.getAction()) {
-	        	case MotionEvent.ACTION_UP:
+				case R.id.full_view_favorite_contact:
 	        		favoriteContact();
 	        		return true;
-			}
-			break;
-		case R.id.full_view_add_contact:
-			switch (event.getAction()) {
-		    	case MotionEvent.ACTION_UP:
+				case R.id.full_view_add_contact:
 		    		addContact();
 		    		return true;
 			}
-			break;
 		}
 		
-		return true;
+		return false;
 	}
 	
 	public void openWebpage() {
@@ -153,6 +145,7 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 		String uri = "tel:" + contact.getPhone();
 		Intent i = new Intent(Intent.ACTION_CALL);
 		i.setData(Uri.parse(uri));
+		
 		startActivity(i);
 	}
 	
@@ -165,7 +158,6 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
         i.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
         i.putExtra(Intent.EXTRA_SUBJECT, subject);
         i.putExtra(Intent.EXTRA_TEXT, message);
-
         i.setType("message/rfc822");
 
         startActivity(Intent.createChooser(i, getText(R.string.choose_email_client)));
@@ -174,14 +166,13 @@ public class ContactFullViewActivity extends Activity implements OnTouchListener
 	public void addContact() {
 		Intent i = new Intent(Intent.ACTION_INSERT,
 							ContactsContract.Contacts.CONTENT_URI);
-		
 		i.setType(ContactsContract.Contacts.CONTENT_TYPE);
 		i.putExtra(ContactsContract.Intents.EXTRA_FORCE_CREATE, true);
-		i.putExtra(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_WORK); 
-	    i.putExtra(ContactsContract.Intents.Insert.EMAIL, contact.getEmail());
-	    i.putExtra(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+		i.putExtra(ContactsContract.Intents.Insert.EMAIL, contact.getEmail());
 	    i.putExtra(ContactsContract.Intents.Insert.NAME, contact.getName());
-	    i.putExtra(ContactsContract.CommonDataKinds.Organization.TITLE, contact.getJobTitle());
+	    i.putExtra(ContactsContract.Intents.Insert.PHONE, contact.getPhone());
+	    i.putExtra(ContactsContract.Intents.Insert.COMPANY, getText(R.string.company));
+	    i.putExtra(ContactsContract.Intents.Insert.JOB_TITLE, contact.getJobTitle());
 	    
 		startActivity(i);
 	}

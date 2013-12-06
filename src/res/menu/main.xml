@@ -1,2 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+   <item android:id="@+id/action_ordering"
+          android:title="@string/action_ordering"
+          android:icon="@drawable/contact_list_order"
+          android:showAsAction="always"/>
 </menu>

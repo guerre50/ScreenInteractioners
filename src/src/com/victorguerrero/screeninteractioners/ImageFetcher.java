@@ -10,15 +10,6 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class ImageFetcher extends URLFetcher<Bitmap> {
-	private  Bitmap bitmap;
-	
-	@Override
-	protected void onPostExecute(byte[] response) {
-		if (this.listener != null) {
-			listener.onFetched(bitmap);
-		}
-	}
-	
 	@Override
 	protected byte[] doInBackground(String... arg0) {
 		byte[] result = new byte[0];
@@ -33,11 +24,16 @@ public class ImageFetcher extends URLFetcher<Bitmap> {
 			InputStream is = connection.getInputStream();
 			// TO-DO fix URLFetcher, it fails to get properly images 
 			// probably due to the buffer size
-			bitmap = BitmapFactory.decodeStream(is);
+			this.result = BitmapFactory.decodeStream(is);
 		} catch(Exception ex) {
 			Log.d("FetcherError", ex.toString());
 		}
 		
 		return result;
+	}
+
+	@Override
+	protected Bitmap postProcess(byte[] response) {
+		return null;
 	}
 }

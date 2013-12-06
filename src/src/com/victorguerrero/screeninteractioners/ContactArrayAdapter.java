@@ -48,7 +48,6 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> implements Contac
         if (convertView == null) {
         	LayoutInflater inflator = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);          
         	convertView = inflator.inflate(contactViewId, null);
-        	
         }
         
         TextView nameView = (TextView) convertView.findViewById(R.id.contact_name);
@@ -56,33 +55,33 @@ public class ContactArrayAdapter extends ArrayAdapter<Contact> implements Contac
         final ImageView thumbnailView = (ImageView) convertView.findViewById(R.id.contact_thumbnail);
         ImageView starredView = (ImageView) convertView.findViewById(R.id.contact_starred);
         
-        final Contact contact = list.get(position);
+        final Contact contact = contactsController.getContact(position);
+        
+        convertView.setTag(contact.getName());
         
         nameView.setText(contact.getName());
         jobView.setText(contact.getJobTitle());
-        convertView.setTag(contact);
         
         Bitmap thumbnail = contact.getThumbnail();
+        final String thumbnailURL = contact.getThumbnailURL();
+		thumbnailView.setTag(thumbnailURL);
+		
         if (thumbnail == null ) {
-        	if (contact.getThumbnailURL().equals("")) {
-        		thumbnailView.setImageDrawable(noAvatar);
-        	} else {
+        	thumbnailView.setImageDrawable(noAvatar);
+        	if (!contact.getThumbnailURL().equals("")) {
 		        new ImageFetcher()
 		        	.setOnFetched(new OnFetched() {
 						@Override
 						public <T> void onFetched(T response) {
 							final Bitmap image = (Bitmap)response;
 							contact.setThumbnail(image);
-							activity.runOnUiThread(new Runnable() {
-							    @Override
-							    public void run() {
-							    	thumbnailView.setImageBitmap(image);
-							    	thumbnailView.invalidate();
-							    }
-							});
+							if (((String)thumbnailView.getTag()).equals(thumbnailURL)) {
+								thumbnailView.setImageBitmap(image);
+								thumbnailView.invalidate();
+				    		}
 						}
 					})
-		        	.execute(contact.getThumbnailURL());
+		        	.execute(thumbnailURL);
         	}
         } else {
         	thumbnailView.setImageBitmap(thumbnail);

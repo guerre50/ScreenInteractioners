@@ -42,7 +42,7 @@ public class ContactsController implements ScreenInteractionContactFetcher.OnFet
 	}
 	
 	public void update(ArrayList<Contact> contacts) {
-		this.contacts = contacts;
+		updateContacts(contacts);
 		orderContacts();
 		if (contactsChangeListener != null) {
 			contactsChangeListener.onContactsChange();
@@ -56,6 +56,10 @@ public class ContactsController implements ScreenInteractionContactFetcher.OnFet
 	public void setOrdering(Ordering ordering) {
 		this.ordering = ordering;
 		update(this.contacts);
+	}
+	
+	public void updateContacts(ArrayList<Contact> contacts) {
+		this.contacts = contacts;
 	}
 	
 	public void orderContacts() {
@@ -95,10 +99,11 @@ public class ContactsController implements ScreenInteractionContactFetcher.OnFet
 		    	return nameA[0].compareTo(nameB[0]);
 		    }
 		});
-		
-		
 	}
 	
+	public Contact getContact(int order) {
+		return contacts.get(order);
+	}
 	
 	public void setOrdering(int ordering) {
 		ContactsController.Ordering order = ContactsController.Ordering.values()[ordering];

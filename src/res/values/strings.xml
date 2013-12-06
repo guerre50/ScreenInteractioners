@@ -17,6 +17,6 @@
     <string name="select_sorting_surname_increasing">Efternamn stigande</string>
     <string name="select_sorting_surname_decreasing">Efternamn fallande</string>
     <string name="choose_email_client">Välj en e-postklient</string>
-    
-    <string name="blue">#54b4e6</string>
+    <string name="company">Screen Interaction</string>
+    <string name="action_ordering">Sortera</string>
 </resources>

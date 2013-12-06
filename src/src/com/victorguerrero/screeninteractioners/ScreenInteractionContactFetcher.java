@@ -7,13 +7,13 @@ import org.json.JSONException;
 
 import android.os.Debug;
 import android.util.Log;
+import android.widget.Toast;
 
 
 
 public class ScreenInteractionContactFetcher extends URLFetcher<ArrayList<Contact>> {
-	
 	@Override
-	protected void onPostExecute(byte[] response) {
+	protected ArrayList<Contact> postProcess(byte[] response) {
 		ArrayList<Contact> contacts = new ArrayList<Contact>();
 		String jsonResponse = new String(response);
 		try {
@@ -23,11 +23,9 @@ public class ScreenInteractionContactFetcher extends URLFetcher<ArrayList<Contac
 				contacts.add(new Contact(arr.getJSONObject(i)));
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
+			this.retry();
 		}
 		
-		if (listener != null) {
-			listener.onFetched(contacts);
-		}
+		return contacts;
 	}
 }

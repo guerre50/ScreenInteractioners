@@ -17,6 +17,7 @@ public class Contact {
 	private Bitmap picture;
 	private JSONObject json;
 	private boolean favorited;
+	private final int MAX_NAMES = 2;
 	
 	public Contact() {
 		name = "UNDEFINED";
@@ -26,6 +27,9 @@ public class Contact {
 	public Contact(JSONObject json) {
 		try {
 			this.json = json;
+			
+			cleanName();
+			
 			name = json.getString("name");
 			jobTitle = json.getString("job_title");
 			thumbnailURL = json.getString("thumbnail-url");
@@ -35,7 +39,23 @@ public class Contact {
 			phone = json.getString("phone");
 			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void cleanName() {
+		try {
+			String name = this.json.getString("name");
+			String[] names = name.split(" ");
+			int maxNames = Math.min(names.length, MAX_NAMES);
+			
+			name = "";
+			for (int i = 0; i < maxNames; ++i) {
+				name += names[i] + " ";
+			}
+			
+			this.json.put("name", name);
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
@@ -84,8 +104,17 @@ public class Contact {
 		return email;
 	}
 	
-	public Boolean getStarred() {
-		return false;
+	public Boolean getFavorited() {
+		return favorited;
+	}
+	
+	public void setFavorited(Boolean favorited) {
+		try {
+			json.put("favorited", favorited);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		this.favorited = favorited;
 	}
 	
 	@Override

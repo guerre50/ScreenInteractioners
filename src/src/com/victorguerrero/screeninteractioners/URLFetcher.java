@@ -11,12 +11,17 @@ import android.util.Log;
 
 
 
-public class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
+public abstract class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
+	protected int retries = 0;
+	protected final int MAX_RETRIES = 5;
+	
+	protected String param;
 	public interface OnFetched {
 		public <T>void onFetched(T contacts);
 	}
 	
 	protected OnFetched listener;
+	protected T result;
 	
 	public URLFetcher<T> setOnFetched(OnFetched onContactsFetched) {
 		this.listener = onContactsFetched;
@@ -24,12 +29,27 @@ public class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
 		return this;
 	}
 	
+	protected void retry() {
+		retries += 1;
+		this.execute(this.param);
+	}
+	
+	protected abstract T postProcess(byte[] response);
+	
+	@Override
+	protected void onPostExecute(byte[] response) {
+		if (listener != null) {
+			listener.onFetched(this.result);
+		}
+	}
+	
 	@Override
 	protected byte[] doInBackground(String... arg0) {
 		byte[] result = new byte[0];
 		
 		try {
-			URL url = new URL(arg0[0]);
+			this.param = arg0[0];
+			URL url = new URL(this.param);
 			
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setRequestMethod("GET");
@@ -47,8 +67,12 @@ public class URLFetcher<T> extends AsyncTask<String, Void, byte[]> {
 			
 			result = response.toByteArray();
 		} catch(Exception ex) {
-			Log.d("FetcherError", ex.toString());
+			Log.d("FetcherError", ex.toString() + " " + arg0[0]);
 		}
+		
+		// We do the post processing of the response in an asyncrhonous way
+		// to avoid hiccups in main thread
+		this.result = postProcess(result);
 		
 		return result;
 	}
